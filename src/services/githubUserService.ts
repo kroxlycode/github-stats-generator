@@ -64,7 +64,11 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
     }
   }
 
-  const token = (import.meta as any).env?.VITE_GITHUB_TOKEN || (import.meta as any).env?.GITHUB_TOKEN;
+  const serverToken = typeof globalThis !== 'undefined' && (globalThis as any).process?.env
+    ? (globalThis as any).process.env.GITHUB_TOKEN || (globalThis as any).process.env.VITE_GITHUB_TOKEN
+    : undefined;
+
+  const token = serverToken || (import.meta as any).env?.VITE_GITHUB_TOKEN || (import.meta as any).env?.GITHUB_TOKEN;
 
   const headers: Record<string, string> = {
     'User-Agent': 'GitHub-Stats-Generator-App',
