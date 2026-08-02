@@ -20,9 +20,8 @@
 
 <br />
 
-<!-- 📸 SCREENSHOT PLACEHOLDER 1: MAIN DASHBOARD -->
 <p align="center">
-  <img src="./assets/screenshots/stats-preview.png" alt="Github Stats Generator Dashboard" width="900" />
+  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="Github Stats Generator Dashboard" width="900" />
 </p>
 
 </div>
@@ -39,20 +38,11 @@ Built with **React, Vite, TypeScript, Tailwind CSS, Express, and Vercel Serverle
 
 ## 📸 Screenshots & Showcase
 
-<!-- 📌 FOTOĞRAF EKLEME REHBERİ:
-  Projenize ekran görüntüleri eklemek için:
-  1. Proje dizininizde "assets/screenshots" adında bir klasör oluşturun.
-  2. Ekran görüntülerinizi bu klasöre kaydedin ve isimlerini aşağıdakilerle eşleştirin:
-     - stats-preview.png
-     - icons-preview.png
-     - readme-generator-preview.png
--->
-
 ### 1. 📊 Dynamic Stats Cards (18+ Themes)
 Generate real-time GitHub Profile Stats, Top Languages, Streak Stats, Activity Graphs, and Trophies.
 
 <p align="center">
-  <img src="./assets/screenshots/stats-preview.png" alt="Stats Cards Preview" width="850" />
+  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="Stats Cards Preview" width="850" />
 </p>
 
 ---
@@ -61,7 +51,7 @@ Generate real-time GitHub Profile Stats, Top Languages, Streak Stats, Activity G
 Browse over 60+ tech icons, social media badges with modal link builders, and multi-skill strips.
 
 <p align="center">
-  <img src="./assets/screenshots/icons-preview.png" alt="Icon Library Preview" width="850" />
+  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="Icon Library Preview" width="850" />
 </p>
 
 ---
@@ -70,7 +60,7 @@ Browse over 60+ tech icons, social media badges with modal link builders, and mu
 One-click README.md template generator with live side-by-side rendering and copy/download controls.
 
 <p align="center">
-  <img src="./assets/screenshots/readme-generator-preview.png" alt="README Generator Preview" width="850" />
+  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="README Generator Preview" width="850" />
 </p>
 
 ---
@@ -140,7 +130,7 @@ Or connect your GitHub repository directly in the [Vercel Dashboard](https://ver
 ## 🤝 Credits & Acknowledgements
 
 - **Author**: Dev by **kroxly** ([@kroxlycode](https://github.com/kroxlycode))
-- **SkillIcons.dev**: Special thanks to [Gideon Tong](https://github.com/gideon-tong) for the amazing [SkillIcons.dev](https://skillicons.dev) project.
+- **SkillIcons.dev**: Special thanks to [tandpfun](https://github.com/tandpfun) for the amazing [SkillIcons.dev](https://skillicons.dev) project.
 
 ---
 
