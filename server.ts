@@ -8,6 +8,7 @@ import { renderRepoStatsSvg } from './src/services/svgEngine/repoStatsSvg';
 import { renderActivityGraphSvg } from './src/services/svgEngine/activityGraphSvg';
 import { renderTrophiesSvg } from './src/services/svgEngine/trophiesSvg';
 import { fetchGitHubRepoDetails } from './src/services/githubService';
+import { fetchGitHubUserData } from './src/services/githubUserService';
 import type { LanguageCode } from './src/constants/translations';
 
 export const app = express();
@@ -21,12 +22,14 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// GET /api/stats -> Generates Profile Stats SVG or Activity Graph or Trophies
-app.get('/api/stats', (req, res) => {
+// GET /api/stats -> Generates Profile Stats SVG or Activity Graph or Trophies with REAL live user data
+app.get('/api/stats', async (req, res) => {
   const username = (req.query.username as string) || 'kroxlycode';
   const theme = (req.query.theme as string) || 'radical';
   const locale = (req.query.locale as LanguageCode) || 'tr';
   const type = req.query.type as string;
+
+  const userData = await fetchGitHubUserData(username);
 
   if (type === 'activity') {
     const svg = renderActivityGraphSvg({
@@ -66,6 +69,7 @@ app.get('/api/stats', (req, res) => {
     hide: req.query.hide ? (req.query.hide as string).split(',') : [],
     rank_icon: (req.query.rank_icon as 'github' | 'percentile') || 'github',
     border_radius: parseInt(req.query.border_radius as string, 10) || 8,
+    userData,
   });
 
   res.setHeader('Content-Type', 'image/svg+xml');
@@ -73,11 +77,13 @@ app.get('/api/stats', (req, res) => {
   return res.send(svg);
 });
 
-// GET /api/top-langs -> Generates Top Languages SVG
-app.get('/api/top-langs', (req, res) => {
+// GET /api/top-langs -> Generates Top Languages SVG with REAL live user languages
+app.get('/api/top-langs', async (req, res) => {
   const username = (req.query.username as string) || 'kroxlycode';
   const theme = (req.query.theme as string) || 'radical';
   const locale = (req.query.locale as LanguageCode) || 'tr';
+
+  const userData = await fetchGitHubUserData(username);
 
   const svg = renderTopLangsSvg({
     username,
@@ -90,6 +96,7 @@ app.get('/api/top-langs', (req, res) => {
     hide: req.query.hide ? (req.query.hide as string).split(',') : [],
     custom_title: (req.query.custom_title as string) || '',
     border_radius: parseInt(req.query.border_radius as string, 10) || 8,
+    userData,
   });
 
   res.setHeader('Content-Type', 'image/svg+xml');
@@ -97,11 +104,13 @@ app.get('/api/top-langs', (req, res) => {
   return res.send(svg);
 });
 
-// GET /api/streak -> Generates Streak Stats SVG
-app.get('/api/streak', (req, res) => {
+// GET /api/streak -> Generates Streak Stats SVG with REAL live user streak stats
+app.get('/api/streak', async (req, res) => {
   const username = (req.query.username as string) || 'kroxlycode';
   const theme = (req.query.theme as string) || 'radical';
   const locale = (req.query.locale as LanguageCode) || 'tr';
+
+  const userData = await fetchGitHubUserData(username);
 
   const svg = renderStreakStatsSvg({
     username,
@@ -121,6 +130,7 @@ app.get('/api/streak', (req, res) => {
     dates: (req.query.dates as string) || '',
     type: 'svg',
     date_format: (req.query.date_format as string) || 'M j, Y',
+    userData,
   });
 
   res.setHeader('Content-Type', 'image/svg+xml');

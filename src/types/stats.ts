@@ -38,6 +38,7 @@ export interface ProfileStatsConfig {
   icon_color?: string;
   border_color?: string;
   card_width?: number;
+  userData?: any;
 }
 
 export interface TopLangsConfig {

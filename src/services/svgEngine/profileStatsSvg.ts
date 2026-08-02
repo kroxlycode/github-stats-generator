@@ -59,14 +59,14 @@ export const renderProfileStatsSvg = (config: ProfileStatsConfig): string => {
   const borderRadius = config.border_radius ?? 8;
   const hideBorder = config.hide_border;
 
-  // Mock stats
-  const stars = 128;
-  const commits = config.include_all_commits ? 1452 : 380;
-  const prs = 64;
-  const issues = 19;
-
+  // Real GitHub stats or fallback
+  const stars = config.userData?.totalStars ?? 128;
+  const commits = config.userData?.totalCommits ?? (config.include_all_commits ? 1452 : 380);
+  const prs = config.userData?.totalPRs ?? 64;
+  const issues = config.userData?.totalIssues ?? 19;
+  
   // Calculate Rank
-  const rank = commits > 1000 ? 'A+' : commits > 500 ? 'A' : 'B+';
+  const rank = config.userData?.rank?.level ?? (commits > 1000 ? 'A+' : commits > 500 ? 'A' : 'B+');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195" fill="none">
   <style>

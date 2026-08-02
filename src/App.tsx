@@ -7,6 +7,7 @@ import { THEMES } from './constants/themes';
 import { LANGUAGES, TRANSLATIONS } from './constants/translations';
 import type { LanguageCode } from './constants/translations';
 import { fetchGitHubRepoDetails, type GitHubRepoDetails } from './services/githubService';
+import { fetchGitHubUserData, type GitHubUserData } from './services/githubUserService';
 
 import { 
   getProfileStatsUrl, 
@@ -48,7 +49,9 @@ export const App: React.FC = () => {
   const cleanRepoName = repoName.trim() || 'github-stats-generator';
   const t = TRANSLATIONS[language] || TRANSLATIONS.tr;
 
-  // Fetch live GitHub repo details whenever username or repoName changes
+  const [userData, setUserData] = useState<GitHubUserData | undefined>(undefined);
+
+  // Fetch live GitHub repo details & user data whenever username or repoName changes
   useEffect(() => {
     let isMounted = true;
     fetchGitHubRepoDetails(cleanUsername, cleanRepoName).then((data) => {
@@ -56,12 +59,17 @@ export const App: React.FC = () => {
         setRepoDetails(data);
       }
     });
+    fetchGitHubUserData(cleanUsername).then((data) => {
+      if (isMounted) {
+        setUserData(data);
+      }
+    });
     return () => {
       isMounted = false;
     };
   }, [cleanUsername, cleanRepoName]);
 
-  // Card Configurations based on active username, theme, locale & fetched repoDetails
+  // Card Configurations based on active username, theme, locale & fetched repoDetails / userData
   const profileConfig = {
     username: cleanUsername,
     theme: selectedTheme,
@@ -75,6 +83,7 @@ export const App: React.FC = () => {
     hide: [],
     rank_icon: 'github' as const,
     border_radius: 8,
+    userData,
   };
 
   const topLangsConfig = {
@@ -88,6 +97,7 @@ export const App: React.FC = () => {
     hide: [],
     custom_title: '',
     border_radius: 8,
+    userData,
   };
 
   const streakConfig = {
@@ -108,6 +118,7 @@ export const App: React.FC = () => {
     dates: '',
     type: 'svg' as const,
     date_format: 'M j, Y',
+    userData,
   };
 
   const typingConfig = {
