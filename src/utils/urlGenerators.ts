@@ -18,8 +18,13 @@ import {
   renderTrophiesSvg
 } from '../services/svgEngine';
 
-// Native API base URL (Our own API)
-const NATIVE_API_BASE = 'http://localhost:3001/api';
+// Dynamically retrieve the current host API base URL (Vercel live domain or local dev)
+export const getBaseUrl = (): string => {
+  if (typeof window !== 'undefined' && window.location.origin) {
+    return `${window.location.origin}/api`;
+  }
+  return 'http://localhost:3001/api';
+};
 
 const cleanParams = (params: Record<string, string | number | boolean | undefined>): string => {
   const query = new URLSearchParams();
@@ -53,7 +58,7 @@ export const getProfileStatsUrl = (config: ProfileStatsConfig): string => {
     if (config.border_color) params.border_color = config.border_color.replace('#', '');
   }
 
-  return `${NATIVE_API_BASE}/stats?${cleanParams(params)}`;
+  return `${getBaseUrl()}/stats?${cleanParams(params)}`;
 };
 
 export const getProfileStatsDataUri = (config: ProfileStatsConfig): string => {
@@ -82,7 +87,7 @@ export const getTopLangsUrl = (config: TopLangsConfig): string => {
     if (config.border_color) params.border_color = config.border_color.replace('#', '');
   }
 
-  return `${NATIVE_API_BASE}/top-langs?${cleanParams(params)}`;
+  return `${getBaseUrl()}/top-langs?${cleanParams(params)}`;
 };
 
 export const getTopLangsDataUri = (config: TopLangsConfig): string => {
@@ -107,7 +112,7 @@ export const getStreakStatsUrl = (config: StreakStatsConfig): string => {
     if (config.currStreakNum) params.currStreakNum = config.currStreakNum.replace('#', '');
   }
 
-  return `${NATIVE_API_BASE}/streak?${cleanParams(params)}`;
+  return `${getBaseUrl()}/streak?${cleanParams(params)}`;
 };
 
 export const getStreakStatsDataUri = (config: StreakStatsConfig): string => {
@@ -136,7 +141,7 @@ export const getTypingSvgUrl = (config: TypingSvgConfig): string => {
     lines: config.lines.filter((l) => l.trim().length > 0).join(';'),
   };
 
-  return `${NATIVE_API_BASE}/typing-svg?${cleanParams(params)}`;
+  return `${getBaseUrl()}/typing-svg?${cleanParams(params)}`;
 };
 
 export const getTypingSvgDataUri = (config: TypingSvgConfig): string => {
@@ -163,7 +168,7 @@ export const getRepoStatsUrl = (config: RepoStatsConfig): string => {
     if (config.icon_color) params.icon_color = config.icon_color.replace('#', '');
   }
 
-  return `${NATIVE_API_BASE}/repo?${cleanParams(params)}`;
+  return `${getBaseUrl()}/repo?${cleanParams(params)}`;
 };
 
 export const getRepoStatsDataUri = (config: RepoStatsConfig): string => {
@@ -173,7 +178,7 @@ export const getRepoStatsDataUri = (config: RepoStatsConfig): string => {
 
 // 6. Activity Graph
 export const getActivityGraphUrl = (config: ActivityGraphConfig): string => {
-  return `${NATIVE_API_BASE}/stats?username=${config.username || 'kroxlycode'}&theme=${config.theme}&locale=${config.locale || 'tr'}&type=activity`;
+  return `${getBaseUrl()}/stats?username=${config.username || 'kroxlycode'}&theme=${config.theme}&locale=${config.locale || 'tr'}&type=activity`;
 };
 
 export const getActivityGraphDataUri = (config: ActivityGraphConfig): string => {
@@ -183,7 +188,7 @@ export const getActivityGraphDataUri = (config: ActivityGraphConfig): string => 
 
 // 7. Trophies
 export const getTrophiesUrl = (config: TrophiesConfig): string => {
-  return `${NATIVE_API_BASE}/stats?username=${config.username || 'kroxlycode'}&theme=${config.theme}&locale=${config.locale || 'tr'}&type=trophies`;
+  return `${getBaseUrl()}/stats?username=${config.username || 'kroxlycode'}&theme=${config.theme}&locale=${config.locale || 'tr'}&type=trophies`;
 };
 
 export const getTrophiesDataUri = (config: TrophiesConfig): string => {
@@ -197,13 +202,6 @@ export const formatMarkdownImage = (altText: string, imageUrl: string, linkUrl?:
     return `[${imgTag}](${linkUrl})`;
   }
   return imgTag;
-};
-
-export const getBaseUrl = (): string => {
-  if (typeof window !== 'undefined' && window.location.origin) {
-    return `${window.location.origin}/api`;
-  }
-  return 'http://localhost:3001/api';
 };
 
 export const formatHtmlImage = (altText: string, imageUrl: string, linkUrl?: string): string => {
