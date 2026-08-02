@@ -21,7 +21,7 @@
 <br />
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="Github Stats Generator Dashboard" width="900" />
+  <img src="https://github.com/user-attachments/assets/6846c19a-cfd4-4c80-b269-81a74820c351" alt="Github Stats Generator Dashboard" width="900" /> 
 </p>
 
 </div>
@@ -42,7 +42,8 @@ Built with **React, Vite, TypeScript, Tailwind CSS, Express, and Vercel Serverle
 Generate real-time GitHub Profile Stats, Top Languages, Streak Stats, Activity Graphs, and Trophies.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="Stats Cards Preview" width="850" />
+  <img src="https://github.com/user-attachments/assets/310d7192-7883-4195-930a-12a2008ec645" alt="Stats Cards Preview" width="850" /> 
+
 </p>
 
 ---
@@ -51,7 +52,7 @@ Generate real-time GitHub Profile Stats, Top Languages, Streak Stats, Activity G
 Browse tech icons, social media badges with modal link builders, and multi-skill strips.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="Icon Library Preview" width="850" />
+  <img src="https://github.com/user-attachments/assets/d3db93ee-79e0-4a4e-99d1-3c5af60048ab" alt="Icon Library Preview" width="850" />
 </p>
 
 ---
@@ -60,7 +61,7 @@ Browse tech icons, social media badges with modal link builders, and multi-skill
 One-click README.md template generator with live side-by-side rendering and copy/download controls.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/72dfc10c-5b8d-40ca-b0f1-b24c5f3bdb10" alt="README Generator Preview" width="850" />
+  <img src="https://github.com/user-attachments/assets/2b90346d-1f1e-43a8-8a07-8908a207e24a" alt="README Generator Preview" width="850" />
 </p>
 
 ---
