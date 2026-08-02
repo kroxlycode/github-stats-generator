@@ -36,12 +36,17 @@ export async function fetchGitHubRepoDetails(username: string, repo: string): Pr
   }
 
   try {
-    const response = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
-      headers: {
-        'User-Agent': 'GitHub-Stats-Generator-App',
-        Accept: 'application/vnd.github.v3+json',
-      },
-    });
+    const headers: Record<string, string> = {
+      'User-Agent': 'GitHub-Stats-Generator-App',
+      Accept: 'application/vnd.github.v3+json',
+    };
+
+    const token = (import.meta as any).env?.VITE_GITHUB_TOKEN || (import.meta as any).env?.GITHUB_TOKEN;
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`https://api.github.com/repos/${username}/${repo}`, { headers });
 
     if (response.ok) {
       const data = await response.json();
