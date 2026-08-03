@@ -65,7 +65,7 @@ export async function fetchGitHubRepoDetails(username: string, repo: string): Pr
       return details;
     }
   } catch (error) {
-    console.warn(`GitHub API request failed for ${cacheKey}:`, error);
+    // Ignore
   }
 
   return {

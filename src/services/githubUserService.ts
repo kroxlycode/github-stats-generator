@@ -154,7 +154,6 @@ async function fetchParsedContributions(username: string): Promise<ParsedContrib
       monthlyActivity,
     };
   } catch (err) {
-    console.warn(`⚠️ [Contributions Parser] Failed to parse contributions for ${username}:`, err);
     return {
       totalContributions: 0,
       currentStreak: 0,
@@ -189,7 +188,7 @@ async function fetchAllUserRepos(cleanUser: string, headers: Record<string, stri
         }
       }
     } catch (err) {
-      console.warn(`⚠️ [GitHub API Warning] Auth user repos fetch failed:`, err);
+      // Ignore
     }
   }
 
@@ -272,7 +271,7 @@ async function fetchGraphQLUserData(cleanUser: string, token: string): Promise<P
       }
     }
   } catch (err) {
-    console.warn(`⚠️ [GraphQL API Error] Failed to fetch GraphQL data:`, err);
+    // Ignore
   }
   return null;
 }
@@ -281,8 +280,6 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
   const cleanUser = username.trim().toLowerCase();
   const now = Date.now();
 
-  console.log(`🔍 [GitHub API Debug] Starting user fetch for: "${cleanUser}"`);
-
   if (!cleanUser || cleanUser.length < 2) {
     return getFallbackUserData(cleanUser || 'kroxlycode');
   }
@@ -290,7 +287,6 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
   if (userCache.has(cleanUser)) {
     const cached = userCache.get(cleanUser)!;
     if (now - cached.timestamp < CACHE_TTL) {
-      console.log(`⚡ [GitHub API Debug] Returning cached data for "${cleanUser}"`);
       return cached.data;
     }
   }
@@ -299,7 +295,6 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
   if (typeof window !== 'undefined') {
     try {
       const baseUrl = window.location.origin ? `${window.location.origin}/api` : 'http://localhost:3001/api';
-      console.log(`🚀 [GitHub API Debug] Browser environment detected. Fetching via API proxy: ${baseUrl}/user-data?username=${cleanUser}`);
       const apiRes = await fetch(`${baseUrl}/user-data?username=${encodeURIComponent(cleanUser)}`);
       if (apiRes.ok) {
         const data = await apiRes.json();
@@ -311,14 +306,12 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
         }
       }
     } catch (err) {
-      console.warn(`⚠️ [GitHub API Warning] API proxy fetch failed in browser, falling back to direct server logic:`, err);
+      // Ignore
     }
   }
 
   const nodeEnv = (typeof globalThis !== 'undefined' && (globalThis as any).process?.env) || {};
   const token = nodeEnv.GITHUB_TOKEN || nodeEnv.VITE_GITHUB_TOKEN || (import.meta as any)?.env?.VITE_GITHUB_TOKEN || (import.meta as any)?.env?.GITHUB_TOKEN;
-
-  console.log(`🔑 [GitHub API Debug] Auth Token Available: ${token ? 'YES (Bearer ***)' : 'NO (Unauthenticated)'}`);
 
   const headers: Record<string, string> = {
     'User-Agent': 'GitHub-Stats-Generator-App',
@@ -336,9 +329,6 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
   }
 
   try {
-    // Parallel Fetch REST API, All Repos (all pages), HTML Contributions Scraper & optional GraphQL API
-    console.log(`🚀 [GitHub API Debug] Executing parallel HTTP requests for "${cleanUser}"...`);
-
     const [userRes, reposJson, commitsRes, prsRes, issuesRes, parsedContribs, graphQLData] = await Promise.all([
       fetch(`https://api.github.com/users/${cleanUser}`, { headers }).catch(() => null),
       fetchAllUserRepos(cleanUser, headers, Boolean(token)),
@@ -480,19 +470,9 @@ export async function fetchGitHubUserData(username: string): Promise<GitHubUserD
       },
     };
 
-    console.log(`✅ [GitHub API Debug] User Data created for "${cleanUser}":`, {
-      name: userData.name,
-      repos: userData.publicRepos,
-      stars: userData.totalStars,
-      commits: userData.totalCommits,
-      currentStreak: userData.streak.currentStreak,
-      longestStreak: userData.streak.longestStreak,
-    });
-
     userCache.set(cleanUser, { data: userData, timestamp: now });
     return userData;
   } catch (error) {
-    console.error(`💥 [GitHub API Fatal Error] Exception for "${cleanUser}":`, error);
     return getFallbackUserData(cleanUser);
   }
 }
