@@ -215,8 +215,10 @@ app.get('/api/repo', async (req, res) => {
   return res.send(svg);
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 GitStats Native API sunucusu çalışıyor: http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 GitStats Native API sunucusu çalışıyor: http://localhost:${PORT}`);
+  });
+}
 
 export default app;
