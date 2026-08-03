@@ -22,6 +22,14 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// GET /api/user-data -> Returns full JSON user data for browser client consumption
+app.get('/api/user-data', async (req, res) => {
+  const username = (req.query.username as string) || 'kroxlycode';
+  const userData = await fetchGitHubUserData(username);
+  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=1800');
+  return res.json(userData);
+});
+
 // GET /api/stats -> Generates Profile Stats SVG or Activity Graph or Trophies with REAL live user data
 app.get('/api/stats', async (req, res) => {
   const username = (req.query.username as string) || 'kroxlycode';
@@ -37,6 +45,10 @@ app.get('/api/stats', async (req, res) => {
       theme,
       locale,
       area: req.query.area !== 'false',
+      custom_title: (req.query.custom_title as string) || '',
+      hide_border: req.query.hide_border === 'true',
+      radius: parseInt(req.query.border_radius as string, 10) || 8,
+      userData,
     });
     res.setHeader('Content-Type', 'image/svg+xml');
     res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=3600');
@@ -50,6 +62,12 @@ app.get('/api/stats', async (req, res) => {
       theme,
       locale,
       column,
+      row: 1,
+      margin_w: 15,
+      margin_h: 15,
+      no_bg: req.query.no_bg === 'true',
+      no_frame: req.query.no_frame === 'true',
+      userData,
     });
     res.setHeader('Content-Type', 'image/svg+xml');
     res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=3600');

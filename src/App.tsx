@@ -45,25 +45,42 @@ export const App: React.FC = () => {
   const [repoName, setRepoName] = useState<string>('github-stats-generator');
   const [repoDetails, setRepoDetails] = useState<GitHubRepoDetails | undefined>(undefined);
 
-  const cleanUsername = username.trim() || 'kroxlycode';
-  const cleanRepoName = repoName.trim() || 'github-stats-generator';
+  const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
+  const [debouncedRepoName, setDebouncedRepoName] = useState<string>(repoName);
+
+  // Debounce username input by 500ms to avoid spamming API calls on every keystroke
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedUsername(username), 500);
+    return () => clearTimeout(timer);
+  }, [username]);
+
+  // Debounce repoName input by 500ms
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedRepoName(repoName), 500);
+    return () => clearTimeout(timer);
+  }, [repoName]);
+
+  const cleanUsername = debouncedUsername.trim() || 'kroxlycode';
+  const cleanRepoName = debouncedRepoName.trim() || 'github-stats-generator';
   const t = TRANSLATIONS[language] || TRANSLATIONS.tr;
 
   const [userData, setUserData] = useState<GitHubUserData | undefined>(undefined);
 
-  // Fetch live GitHub repo details & user data whenever username or repoName changes
+  // Fetch live GitHub repo details & user data only after debounced values settle
   useEffect(() => {
     let isMounted = true;
-    fetchGitHubRepoDetails(cleanUsername, cleanRepoName).then((data) => {
-      if (isMounted) {
-        setRepoDetails(data);
-      }
-    });
-    fetchGitHubUserData(cleanUsername).then((data) => {
-      if (isMounted) {
-        setUserData(data);
-      }
-    });
+    if (cleanUsername.length >= 2) {
+      fetchGitHubRepoDetails(cleanUsername, cleanRepoName).then((data) => {
+        if (isMounted) {
+          setRepoDetails(data);
+        }
+      });
+      fetchGitHubUserData(cleanUsername).then((data) => {
+        if (isMounted) {
+          setUserData(data);
+        }
+      });
+    }
     return () => {
       isMounted = false;
     };
@@ -162,6 +179,7 @@ export const App: React.FC = () => {
     custom_title: '',
     hide_border: false,
     radius: 8,
+    userData,
   };
 
   const trophiesConfig = {
@@ -174,6 +192,7 @@ export const App: React.FC = () => {
     margin_h: 15,
     no_bg: false,
     no_frame: false,
+    userData,
   };
 
   // Cards List for simultaneous Grid view with translated titles & Data URIs

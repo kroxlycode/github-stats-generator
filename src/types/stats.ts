@@ -129,6 +129,7 @@ export interface ActivityGraphConfig {
   custom_title: string;
   hide_border: boolean;
   radius: number;
+  userData?: any;
 }
 
 export interface TrophiesConfig {
@@ -141,6 +142,7 @@ export interface TrophiesConfig {
   margin_h: number;
   no_bg: boolean;
   no_frame: boolean;
+  userData?: any;
 }
 
 export interface SocialLink {

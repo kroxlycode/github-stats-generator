@@ -41,7 +41,9 @@ export async function fetchGitHubRepoDetails(username: string, repo: string): Pr
       Accept: 'application/vnd.github.v3+json',
     };
 
-    const token = (import.meta as any).env?.VITE_GITHUB_TOKEN || (import.meta as any).env?.GITHUB_TOKEN;
+    const nodeEnv = (typeof globalThis !== 'undefined' && (globalThis as any).process?.env) || {};
+    const token = nodeEnv.GITHUB_TOKEN || nodeEnv.VITE_GITHUB_TOKEN || (import.meta as any)?.env?.VITE_GITHUB_TOKEN || (import.meta as any)?.env?.GITHUB_TOKEN;
+
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
@@ -53,9 +55,9 @@ export async function fetchGitHubRepoDetails(username: string, repo: string): Pr
       const lang = data.language || 'TypeScript';
       const details: GitHubRepoDetails = {
         name: data.name || repo,
-        description: data.description || `${repo} • Modern, fast and scalable project repository.`,
-        stars: data.stargazers_count ?? 0,
-        forks: data.forks_count ?? 0,
+        description: data.description || `${repo} • Open-source repository.`,
+        stars: Number(data.stargazers_count || 0),
+        forks: Number(data.forks_count || 0),
         language: lang,
         languageColor: LANGUAGE_COLORS[lang] || '#3178c6',
       };
@@ -63,25 +65,15 @@ export async function fetchGitHubRepoDetails(username: string, repo: string): Pr
       return details;
     }
   } catch (error) {
-    console.warn(`GitHub API request failed for ${cacheKey}, using fallback:`, error);
+    console.warn(`GitHub API request failed for ${cacheKey}:`, error);
   }
-
-  // Fallback if repository doesn't exist or API limit is exceeded
-  let hash = 0;
-  for (let i = 0; i < repo.length; i++) {
-    hash = (hash << 5) - hash + repo.charCodeAt(i);
-    hash |= 0;
-  }
-  const posHash = Math.abs(hash);
-  const langNames = Object.keys(LANGUAGE_COLORS);
-  const fallbackLang = langNames[posHash % langNames.length];
 
   return {
     name: repo,
-    description: `${repo} • Modern, fast and scalable open-source repository.`,
-    stars: (posHash % 350) + 15,
-    forks: Math.floor((posHash % 350) * 0.25) + 2,
-    language: fallbackLang,
-    languageColor: LANGUAGE_COLORS[fallbackLang],
+    description: `${repo} • GitHub Repository`,
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    languageColor: '#3178c6',
   };
 }

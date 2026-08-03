@@ -94,6 +94,38 @@ One-click README.md template generator with live side-by-side rendering and copy
 
 ---
 
+## aaPanel & PM2 Setup Guide
+
+aaPanel üzerinde projenizi **PM2 Manager** ile çalıştırmak için aşağıdaki adımları uygulayın:
+
+### 1. Kurulum ve Build
+```bash
+npm install
+npm run build
+```
+
+### 2. Ortam Değişkenleri (.env)
+Kök dizinde `.env` dosyası oluşturun ve GitHub API token'ınızı ekleyin:
+```env
+GITHUB_TOKEN=ghp_your_personal_access_token_here
+PORT=3001
+```
+
+### 3. aaPanel PM2 Manager İle Çalıştırma
+aaPanel PM2 Manager arayüzünde:
+- **Project Directory**: Projenin kök dizini (ör. `/www/wwwroot/github-stats-generator`)
+- **Start File / Script**: `server.ts` veya `npm run start`
+- **Execution Mode**: `fork`
+- **Node Version**: Node.js v18+
+
+veya SSH üzerinden çalıştırmak için:
+```bash
+pm2 start "npx tsx server.ts" --name "github-stats-api"
+pm2 save
+```
+
+---
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
