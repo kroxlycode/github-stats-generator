@@ -1,3 +1,11 @@
+// Load .env file automatically (Node.js 20.12+ native — no dotenv needed)
+try {
+  process.loadEnvFile();
+  console.log('[Server] .env dosyası yüklendi ✅');
+} catch {
+  // .env yoksa sessizce devam et (Vercel / prod env vars kullanır)
+}
+
 import express from 'express';
 import cors from 'cors';
 import { renderProfileStatsSvg } from './src/services/svgEngine/profileStatsSvg';
